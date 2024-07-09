@@ -1,4 +1,6 @@
 const Product = require('../models/product');
+const fs = require('fs');
+const csv = require('csv-parser');
 
 // Create a new product
 const createProduct = async (req, res) => {
@@ -60,10 +62,38 @@ const deleteProduct = async (req, res) => {
     }
 };
 
+
+
+// bulk upload
+
+const bulkUpload = async(req,res) =>{
+ if(!req.file){
+    return res.status(400).json({message:"Please upload a file"})
+ }
+ const results = [];
+ const file = req.file;
+ fs.createReadStream(file.path)
+ .pipe(csv())
+ .on('data',(data)=> results.push(data))
+ .on('end',async()=>{
+    try {
+        await Product.insertMany(results);
+        res.status(200).json({message:"Products uploaded successfully"});
+
+    }catch(err){
+        res.status(400).json({message:"Failed to upload products",error:err.message});
+    } finally{
+         fs.unlinkSync(file.path);
+    }
+
+ });
+
+}
 module.exports = {
     createProduct,
     getAllProducts,
     getProductById,
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    bulkUpload
 };

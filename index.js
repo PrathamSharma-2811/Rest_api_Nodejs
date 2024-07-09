@@ -3,10 +3,23 @@ const mongoose = require("mongoose")
 const bodyParser = require("body-parser")
 // to use content in env file
 require('dotenv').config()
+
+
+var morgan = require('morgan')
+var path = require('path')
+var rfs = require('rotating-file-stream')
 //intialiazing app of express
 const app = express();
 
 app.use(bodyParser.json())
+
+var accessLogStream = rfs.createStream('access.log', {
+    interval: '1d', // rotate daily
+    path: path.join(__dirname, 'log')
+  });
+   
+  // setup the logger
+app.use(morgan('combined', { stream: accessLogStream }));
 
 // connect to database
 mongoose.connect(process.env.MONGO_URL,{useNewUrlParser: true,useUnifiedTopology: true})
@@ -14,6 +27,9 @@ mongoose.connect(process.env.MONGO_URL,{useNewUrlParser: true,useUnifiedTopology
 const db = mongoose.connection; 
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', () => console.log('Database connection successful!'));
+
+
+
 
 //connecting the routes
 const userRouter = require('./routes/user');
