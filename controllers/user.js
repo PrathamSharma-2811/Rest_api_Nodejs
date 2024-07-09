@@ -84,14 +84,29 @@ const details = async (req, res) => {
     }
 };
  
-const updateDetails = async(req, res) => {
-    try{
-        const user = await User.findByIdAndUpdate(req.user.id, req.body, {new: true});
-        res.status(200).json({message: 'User Details Updated', data: user});
-    }catch(err) {
-        res.status(400).json({message: err.message});
+const updateDetails = async (req, res) => {
+    const userId = req.user.userId;
+    const { name, email, mobile, password, isAdmin } = req.body;
+ 
+    try {
+        const user = await User.findById(userId);
+ 
+        if (!user) {
+            return res.status(400).json({ message: 'User not found' });
+        }
+ 
+        if (password) user.password = await bcrypt.hash(password, 10);
+        if (email) user.email = email;
+        if (mobile) user.mobile = mobile;
+        if (name) user.name = name;
+        if (isAdmin) user.isAdmin = isAdmin;
+ 
+        await user.save();
+        res.status(200).json({ message: 'User details updated successfully!', data: user });
+    } catch (err) {
+        res.status(400).json({ message: err.message });
     }
-}
+};
  
 const deleteUser = async(req, res) => {
     const usid = req.params.id;
