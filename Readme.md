@@ -59,21 +59,4 @@ This is a backend API for an e-commerce platform that handles user authenticatio
 - `PUT /updateProduct/:id` - Update a product by ID (admin only)
 - `DELETE /deleteProduct/:id` - Delete a product by ID (admin only)
 
-## Contributing
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/fooBar`)
-3. Commit your changes (`git commit -am 'Add some fooBar'`)
-4. Push to the branch (`git push origin feature/fooBar`)
-5. Create a new Pull Request
-
-## License
-
-This project is licensed under the MIT License.
-```
-
-### GitHub Description
-
-**E-commerce Backend API: A secure and scalable backend solution for managing users, products, and orders in an e-commerce platform. Built with Node.js, Express, MongoDB, and JWT.**
-
-Feel free to adjust the repository URL and any other details to match your project specifics.
