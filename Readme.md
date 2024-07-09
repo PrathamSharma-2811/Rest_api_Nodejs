@@ -59,3 +59,4 @@ This is a backend API for an e-commerce platform that handles user authenticatio
 - `PUT /updateProduct/:id` - Update a product by ID (admin only)
 - `DELETE /deleteProduct/:id` - Delete a product by ID (admin only)
 
+
